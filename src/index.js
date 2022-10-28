@@ -3,10 +3,19 @@ const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
 const API = 'https://api.escuelajs.co/api/v1/products';
 const newItems = document.createElement('section');
+let maxPages;
+(async () => {
+  const response = await fetch(API)
+  const data = await response.json()
+  maxPages = Math.floor(data.length/10) 
+
+})()
+
 newItems.classList.add('Items');
 const getData = async (api, offset, limit) => {
 
   const response = await fetch(`${api}?offset=${offset}&limit=${limit}`)
+  console.log(response)
   const data =  await response.json()
   console.log(data)
   let products = [ ...data];
@@ -30,20 +39,28 @@ const getData = async (api, offset, limit) => {
 
 
 }
-const loadAllData = () => {
-  getData(API, 5, pagination * 10)
+const loadData = async () => {
+  await getData(API, 5, pagination * 10)
   
 }
 
-const loadNewData = async () => {
-  await getData(API, pagination, 10);
-  setPagination(pagination + 1)
+const loadNewData =  () => {
+  getData(API, pagination, 10);
+  pagination = pagination +1
+  setPagination(pagination)
+  console.log(pagination)
 
 }
 
 const intersectionObserver = new IntersectionObserver(entries => {
 
   entries.forEach((entry) => {
+    
+    if(pagination  >= maxPages){
+      $observe.innerHTML = "Todos los productos Obtenidos"
+      intersectionObserver.unobserve($observe)
+      
+    }
     if(entry.isIntersecting){
       loadNewData()
     }
@@ -64,5 +81,5 @@ const getPagination = () => {
 
 }
 let pagination = getPagination()
-loadAllData()
+loadData()
 intersectionObserver.observe($observe);
