@@ -7,6 +7,7 @@
     "start": "live-server --open=public --entry-file=index.html",
     "e2e": "cypress open",
     "dev":"vite",
+    "preview":"vite preview",
     "build":"vite build"
   },
   "repository": {

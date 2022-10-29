@@ -36,7 +36,7 @@ const getData = async (api, offset, limit) => {
 
   newItems.append(...output)
   $app.appendChild(newItems);
-
+  intersectionObserver.observe($observe);
 
 }
 const loadData = async () => {
@@ -82,4 +82,3 @@ const getPagination = () => {
 }
 let pagination = getPagination()
 loadData()
-intersectionObserver.observe($observe);
